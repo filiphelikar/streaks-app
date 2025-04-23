@@ -6,11 +6,13 @@ import { NavComponent } from "./nav/nav.component";
   selector: 'app-root',
   imports: [RouterOutlet, NavComponent],
   template: `
-  <div class="hidden md:block">
-    <app-nav />
-  </div>
-  <div class="min-h-screen w-full md:w-2xl md:mx-auto xl:w-5xl">
-    <router-outlet />
+  <div class="min-h-screen">
+    <div class="hidden md:block">
+      <app-nav />
+    </div>
+    <div class="w-full md:w-2xl md:mx-auto xl:w-5xl pt-8 md:pt-20 px-5 md:px-0">
+       <router-outlet />
+    </div>
     <div class="md:hidden fixed bottom-0">
       <app-nav [isMobile]="true" />
     </div>

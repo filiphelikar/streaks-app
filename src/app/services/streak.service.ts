@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Activity } from '../../interfaces/activity';
+import { Activity, NewActivity } from '../../interfaces/activity';
 
 @Injectable({
   providedIn: 'root'
@@ -31,11 +31,18 @@ export class StreakService {
     localStorage.setItem(this.storageKey, JSON.stringify(activities))
   }
 
-  public addActivity(newActivity: Activity): void {
+  public addActivity(newActivity: NewActivity): void {
+    const activity: Activity = {
+      ...newActivity,
+      createdAt: new Date(),
+      lastStreak: this.getPastDateByFrequency(newActivity.frequency),
+      streaks: 0,
+    };
     const activities = this.getAll();
-    activities.push(newActivity);
+    activities.push(activity);
     this.saveAll(activities);
   }
+
 
   public getByTitle(title: string): Activity {
     return this.getAll().find(a => a.title === title)!
@@ -58,12 +65,29 @@ export class StreakService {
   }
 
   public checkStreakValidity(title: string): boolean {
-    const activity = this.getByTitle(title)
-    const diffDays = this.countFullDaysBetween(new Date(activity.lastStreak), new Date());
+    const activities = this.getAll();
+    const index = activities.findIndex(a => a.title === title);
+    if (index === -1) return false;
+
+    const activity = activities[index];
+    const now = new Date();
+    const diffDays = this.countFullDaysBetween(
+      new Date(activity.lastStreak),
+      now
+    );
+
     const minDays = this.frequencyMap[activity.frequency];
 
-    if (diffDays >= minDays * 2) {
+    if (diffDays > minDays) {
       activity.streaks = 0;
+
+      const retryDate = new Date();
+      retryDate.setDate(now.getDate() - minDays);
+      activity.lastStreak = retryDate;
+
+      activities[index] = activity;
+      this.saveAll(activities);
+
       return false;
     }
 
@@ -80,4 +104,12 @@ export class StreakService {
     const diffTime = toMidnight.getTime() - fromMidnight.getTime();
     return Math.floor(diffTime / (1000 * 60 * 60 * 24));
   }
+
+  private getPastDateByFrequency(freq: Activity['frequency']): Date {
+    const daysAgo = this.frequencyMap[freq];
+    const now = new Date();
+    now.setDate(now.getDate() - daysAgo);
+    return now;
+  }
+
 }
