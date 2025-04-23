@@ -1,0 +1,7 @@
+export interface Activity {
+    title: string;
+    frequency: 'every day' | 'every other day' | 'once every two days' | 'once every three days' | 'once every four days' | 'once every five days' | 'once every six days' | 'once a week' | 'once every two weeks';
+    createdAt: Date;
+    lastStreak: Date;
+    streaks: number;
+}
