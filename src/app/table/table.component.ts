@@ -1,0 +1,91 @@
+import { Component } from '@angular/core';
+import { StreakService } from '../services/streak.service';
+import { CommonModule } from '@angular/common';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { heroCog8Tooth } from '@ng-icons/heroicons/outline';
+import { FormsModule } from '@angular/forms';
+import { Activity } from '../../interfaces/activity';
+
+@Component({
+  selector: 'app-table',
+  standalone: true,
+  imports: [CommonModule, NgIcon, FormsModule],
+  viewProviders: [provideIcons({ heroCog8Tooth })],
+  template: `
+  <section class='grid gap-6 p-6 sm:grid-cols-2 lg:grid-cols-3'>
+    <div *ngFor='let activity of streakService.getAll()' class='relative bg-stone-100 dark:bg-gray-900 rounded-2xl shadow-md p-6 flex flex-col items-center text-center'>
+      <button (click)='openModal(activity)' class='absolute right-5 top-5 cursor-pointer'>
+        <ng-icon strokeWidth='2' size='20' name='heroCog8Tooth' class='text-gray-700 dark:text-white' />
+      </button>
+      <div class='w-16 h-16 rounded-full bg-green-500 text-white flex items-center justify-center text-2xl font-bold mb-4'
+      [ngClass]="{
+        'bg-red-500': activity.streaks === 0,
+      }"
+      >
+        {{ activity.streaks }}
+      </div>
+      <h1 class='text-xl font-semibold mb-2'>{{ activity.title }}</h1>
+      <p class='text-sm text-gray-500 mb-4'>Next streak: {{ activity.nextStreak | date: 'mediumDate' }}</p>
+      <p class='text-sm text-gray-500 mb-4'>{{ activity.frequency }}</p>
+      <button (click)='streakService.markAsDone(activity.title)' 
+      class='cursor-pointer relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 dark:text-white'>
+        <span class='relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-transparent group-hover:dark:bg-transparent active:bg-gray-200 dark:active:bg-gray-800'>
+          Mark as Done
+        </span>
+      </button>
+    </div>
+  </section>
+  <div *ngIf='isModalOpen' class='fixed inset-0  bg-opacity-50 flex justify-center items-center'>
+  <div (click)='closeModal()' class='w-full h-full'></div>
+    <div class='fixed bg-stone-100 dark:bg-gray-900 p-6 rounded-lg shadow-lg w-86 md:w-96'>
+      <h2 class='text-xl font-semibold mb-4'>Activity Settings</h2>
+      <p class='mb-4'>Set alert time or delete activity:</p>
+
+      <div class='mb-4'>
+        <label for='alert-time' class='block text-sm'>Set Alert Time</label>
+        <input id='alert-time' type='time' class='border p-2 rounded' [(ngModel)]='alertTime' />
+      </div>
+
+      <div class='flex justify-between'>
+        <button (click)='deleteActivity()' class='px-4 py-2 bg-red-500 text-white rounded cursor-pointer'>Delete Activity</button>
+        <button (click)='Save()' class='px-4 py-2 bg-green-600 rounded cursor-pointer'>Save</button>
+      </div>
+    </div>
+    </div>
+  `,
+})
+export class TableComponent {
+  isModalOpen = false;
+  selectedActivity: Activity | null = null;
+  alertTime: string = '';
+
+  constructor(public streakService: StreakService) {
+    this.streakService.checkAllForExpired();
+  }
+
+  public Save() {
+    if (this.selectedActivity && this.alertTime)
+      this.streakService.editAlertTime(this.selectedActivity.title, this.alertTime)
+    this.closeModal()
+  }
+
+  public deleteActivity(): void {
+    if (this.selectedActivity) {
+      this.streakService.deleteActivity(this.selectedActivity.title)
+      this.closeModal()
+    }
+  }
+
+  public openModal(activity: Activity): void {
+    this.selectedActivity = activity;
+    this.alertTime = activity.alertTime || '';
+    this.isModalOpen = true;
+  }
+
+  public closeModal(): void {
+    this.isModalOpen = false;
+    this.selectedActivity = null;
+    this.alertTime = '';
+  }
+
+}

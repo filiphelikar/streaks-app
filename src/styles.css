@@ -1,6 +1,14 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 
+@theme {
+    --font-bangers: 'Bangers', system-ui;
+}
+  
+:root {
+    --font-bangers: 'Bangers', system-ui;
+}
+
 body {
     transition: background 0.4s, color 0.4s;
 }

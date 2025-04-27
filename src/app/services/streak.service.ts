@@ -34,6 +34,7 @@ export class StreakService {
       createdAt: this.getStartOfToday(),
       lastStreak: this.getPastDateByFrequency(newActivity.frequency),
       nextStreak: this.getStartOfToday(),
+      alertTime: '14:00',
       streaks: 0,
     };
     const activities = this.getAll();
@@ -44,6 +45,26 @@ export class StreakService {
   public getByTitle(title: string): Activity {
     return this.getAll().find(a => a.title === title)!;
   }
+
+  public editAlertTime(title: string, time: string): void {
+    const activities = this.getAll();
+    const index = activities.findIndex(a => a.title === title);
+    const activity = activities[index];
+
+    activity.alertTime = time;
+    this.saveAll(activities);
+  }
+
+  public deleteActivity(title: string): void {
+    const activities = this.getAll();
+    const index = activities.findIndex(a => a.title === title);
+    
+    if (index !== -1) {
+      activities.splice(index, 1);
+      this.saveAll(activities);
+    }
+  }
+  
 
   public markAsDone(title: string): void {
     this.checkAllForExpired()

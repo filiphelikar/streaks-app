@@ -4,6 +4,7 @@ export interface Activity {
     createdAt: Date;
     lastStreak: Date;
     nextStreak: Date;
+    alertTime: string;
     streaks: number;
 }
 

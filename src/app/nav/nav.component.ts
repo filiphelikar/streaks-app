@@ -10,7 +10,7 @@ import { NgClass, NgIf } from '@angular/common';
   imports: [RouterModule, NgIcon, NgClass,],
   template: `
   <div 
-  class="flex justify-around h-12 dark:bg-gray-900 dark:border-none"
+  class="flex justify-around h-12 bg-white dark:bg-gray-900 dark:border-none"
   [ngClass]="{
     'border-t w-screen': isMobile(),
     'border-b': !isMobile(),
