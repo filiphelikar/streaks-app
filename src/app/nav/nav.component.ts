@@ -8,40 +8,19 @@ import { NgClass, NgIf } from '@angular/common';
   selector: 'app-nav',
   standalone: true,
   imports: [RouterModule, NgIcon, NgClass,],
-  template: `
-  <div 
-  class="flex justify-around h-12 bg-white dark:bg-gray-900 dark:border-none"
-  [ngClass]="{
-    'border-t w-screen': isMobile(),
-    'border-b': !isMobile(),
-  }"
-  >
-    <a routerLink="/" class="md:w-10 my-auto"> 
-      <img class="h-8 float-left" src="favicon.png" alt="logo"/>
-    </a>
-    <a class="m-2" routerLink="/">Home</a>
-    <a class="m-2" routerLink="/create">New</a>
-    <button class="cursor-pointer" (click)="toggleTheme()">
-      @if (isDark) {
-        <ng-icon strokeWidth="2" size="17" name="heroMoon" />
-      } @else {
-        <ng-icon strokeWidth="2" size="17" name="heroSun" />
-      }
-    </button>
-  </div>
-  `,
+  templateUrl: './nav.component.html',
   viewProviders: [provideIcons({ heroMoon, heroSun })]
 })
 export class NavComponent {
-  isMobile = input(false);
-  isDark = false;
+  public isMobile = input(false);
+  public isDark = false;
 
-  ngOnInit() {
+  public ngOnInit() {
     this.isDark = localStorage.getItem('theme') === 'dark';
     this.applyTheme();
   }
 
-  toggleTheme() {
+  public toggleTheme() {
     this.isDark = !this.isDark;
     localStorage.setItem('theme', this.isDark ? 'dark' : 'light');
     this.applyTheme();
