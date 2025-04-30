@@ -28,6 +28,8 @@ export class NavComponent {
 
   private applyTheme() {
     const html = document.documentElement;
+    const metaThemeColor = document.querySelector("meta[name=theme-color]");
     html.classList.toggle('dark', this.isDark);
+    metaThemeColor?.setAttribute("content", this.isDark ? "oklch(0.278 0.033 256.848)" : "#fff");
   }
 }

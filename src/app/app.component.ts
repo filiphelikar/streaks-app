@@ -15,6 +15,7 @@ import { NavComponent } from "./nav/nav.component";
     </div>
     <div class="md:hidden fixed bottom-0">
       <app-nav [isMobile]="true" />
+      <div class='h-5 bg-white dark:bg-gray-900'></div>
     </div>
   </div>
   `,
