@@ -4,7 +4,7 @@
         <div class="flex flex-col w-full md:w-1/2">
             <label for="title" class="mb-1 text-sm font-medium">Title</label>
             <input required minlength="3" placeholder="Aa" id="title" formControlName="title" type="text"
-                class="placeholder-gray-400 dark:placeholder-gray-500 rounded-md border border-gray-300 bg-gray-100 dark:bg-gray-900 p-2 text-sm shadow-sm focus:border-black focus:outline-none" />
+                class="placeholder-gray-400 dark:placeholder-gray-500 rounded-md border border-gray-300 bg-gray-100 dark:bg-gray-900 p-2 text-[16px] md:text-sm shadow-sm focus:border-black focus:outline-none" />
         </div>
         @if (isError) {
         <div class="static md:hidden block">
@@ -15,7 +15,7 @@
         <div class="flex flex-col w-full md:w-1/2">
             <label for="frequency" class="mb-1 text-sm font-medium ">Choose a frequency</label>
             <select id="frequency" formControlName="frequency"
-                class=" rounded-md border border-gray-300 bg-gray-100 dark:bg-gray-900 p-2 text-sm shadow-sm focus:border-black focus:outline-none">
+                class=" rounded-md border border-gray-300 bg-gray-100 dark:bg-gray-900 p-2 text-[16px] md:text-sm shadow-sm focus:border-black focus:outline-none">
                 <option *ngFor="let freq of frequencies" [value]="freq"
                     class="bg-gray-100 dark:bg-gray-900 rounded-none">{{ freq }}</option>
             </select>
