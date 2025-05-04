@@ -3,6 +3,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Activity } from '../../interfaces/activity';
 import { CommonModule } from '@angular/common';
 import { StreakService } from '../services/streak.service';
+import { Router } from '@angular/router';
 
 @Component({
   standalone: true,
@@ -15,7 +16,7 @@ export class CreateComponent {
 
   public isError = false;
 
-  constructor(private streakService: StreakService) {
+  constructor(private streakService: StreakService, private router: Router) {
     this.activityForm.valueChanges.subscribe(() => {
       if (this.isError && this.activityForm.valid) {
         this.isError = false;
@@ -55,5 +56,7 @@ export class CreateComponent {
       title: value.title ?? '',
       frequency: value.frequency ?? 'every day',
     });
+
+    this.router.navigate(['/']);
   }
 }
